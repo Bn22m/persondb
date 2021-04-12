@@ -1,0 +1,111 @@
+##################
+# graphql
+# 2021
+# BM
+####################
+# http://localhost:8000/
+# For more info.
+#############################
+
+#GraphQL query
+query getPersonPage($page: String, $plimit: Int) {
+      getPersonPage(page: $page, plimit: $plimit){
+        id, name, surname, age, gender, birthday, phone, email, contacts {id, contactsemail, personemail}, created, modified
+      }
+  }
+# Query Variables.
+{
+  "page": "email,email,1,10,0",
+  "plimit": 10
+}
+
+
+###############
+# cURL
+# View Person:
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "{getPersonPage(page: \"email,email,1,5,data\", plimit: 5){id,name,surname,age,email,contacts{id, personid, contactsid, contactsemail, personemail}, created, modified }}"}' \
+http://localhost:8000/graphql
+
+
+############### OutPut ###########
+$ curl -X POST \
+> -H "Content-Type:application/json" \
+> -d'{"query": "{getPersonPage(page: \"email,email,1,5,data\", plimit: 5){id,name
+,surname,age,email,contacts{id, personid, contactsid, contactsemail, personemai
+l}, created, modified }}"}' \
+> http://localhost:8000/graphql
+{"data":{"getPersonPg":[{"id":13,"name":"Benny","surname":"Zony","age":60,"email":"benny@bon.i
+o","contacts":[{"id":null,"personid":null,"contactsid":null,"contactsemail":null,"personemail"
+:null}],"created":"2021-04-09T19:48:55.823Z","modified":"2021-04-09T19:48:55.823Z"},{"id":20,"
+name":"Bonny","surname":"Zondy","age":60,"email":"bonny@bodn.io","contacts":[{"id":null,"perso
+nid":null,"contactsid":null,"contactsemail":null,"personemail":null}],"created":"2021-04-09T19
+:48:55.823Z","modified":"2021-04-09T19:48:55.823Z"},{"id":6,"name":"Bonny","surname":"Zony","a
+ge":60,"email":"bonny@bon.io","contacts":[{"id":null,"personid":null,"contactsid":null,"contac
+tsemail":null,"personemail":null}],"created":"2021-04-09T19:48:55.823Z","modified":"2021-04-09
+T19:48:55.823Z"},{"id":27,"name":"Boy","surname":"Hony","age":60,"email":"boy@bon.io","contact
+s":[{"id":null,"personid":null,"contactsid":null,"contactsemail":null,"personemail":null}],"cr
+eated":"2021-04-09T19:48:55.823Z","modified":"2021-04-09T19:48:55.823Z"},{"id":12,"name":"Cenn
+y","surname":"Xony","age":41,"email":"cenny@con.io","contacts":[{"id":12,"personid":12,"contac
+tsid":16,"contactsemail":"ronny@rodn.io","personemail":"cenny@con.io"},{"id":12,"personid":12,
+"contactsid":15,"contactsemail":"vony@ondy.io","personemail":"cenny@con.io"}],"created":"2021-
+04-09T19:48:55.823Z","modified":"2021-04-09T19:48:55.823Z"}]}}
+###################################
+#
+# Create Person:
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { postPerson(input:{name:\"Jula\",surname:\"Navu\",age:null,gender:\"\",birthday:\"2003/07/07\",phone:\"0120406432\",email:\"jula@navu.io\"}){email}}"}' \
+http://localhost:8000/graphql
+
+################# OutPut: ##########
+$ curl -X POST \
+> -H "Content-Type:application/json" \
+> -d'{"query": "mutation { postPerson(input:{name:\"Jula\",surname:\"Navu\",age
+:null,gender:\"\",birthday:\"2003/07/07\",phone:\"0120406432\",email:\"jula@nav
+u.io\"}){email}}"}' \
+> http://localhost:8000/graphql
+{"data":{"postPerson":{"email":"jula@navu.io"}}}
+#####################################
+
+##################################
+# Create Contacts
+#
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { postContacts(input:{personid:6,contactsid:9,contactsname:\"Renny\",contactsphone:\"0123050789\",contactsemail:\"renny@ron.io\",personemail:\"bonny@bon.io\"}){contactsname,contactsemail}}"}' \
+http://localhost:8000/graphql
+
+#######################
+# Update Person:
+#
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { updatePerson(id: 12, input:{name:\"Cenny\",surname:\"Sony\",age:null,gender:\"female\",birthday:\"1980/10/04\",phone:\"0820060002\",email:\"cenny@sony.io\"}){name, surname, phone, email}}"}' \
+http://localhost:8000/graphql
+
+
+##################
+# Delete Person
+#
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { deletePerson(id: 13, input:{email:\"benny@bon.io\"}){id, email}}"}' \
+http://localhost:8000/graphql
+
+############# OutPut ###########
+#
+$ curl -X POST \
+> -H "Content-Type:application/json" \
+> -d'{"query": "mutation { deletePerson(id: 10, input:{email:\"denny@don.io\"})
+{id, email}}"}' \
+> http://localhost:8000/graphql
+{"data":{"deletePerson":{"id":10,"email":"denny@don.io"}}}
+#
+############################################

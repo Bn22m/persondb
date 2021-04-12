@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!--
+index.html
+-->
+<html lang="en">
+  <head>
+    <title>Person App Project</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../public/css/main.css">
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <ul class="navbar1">
+          <li><a href="/app">New person</a></li>
+          <li><a href="/person?paginator=email,email,1,20,0,db">Person #1</a></li>
+          <li><a href="/person?paginator=email,email,2,20,0,db">Person #2</a></li>
+          <li><a href="/person?paginator=email,email,3,20,0,db">Person #3</a></li>
+          <li><a href="/graphqlapp">Graphql app</a></li>
+        </ul>
+      </div>
+    </header>
+    <h1> Person App. </h1>
+    <div>
+      <progress id="ckodbprogres" value="0" max="100">0%</progress>
+      <div id="dvresults">
+      </div>
+    </div>
+    <div>
+      <div id="dvinfo"></div>
+      <div id="dvinfo2"></div>
+      <div id="dvdisplay"></div>
+    </div>
+    <hr>
+    <div class="dvlogs">
+      <div class="log" id="log"></div>
+      <div class="logs" id="logs"></div>
+    </div>
+    <hr>
+    <div>
+      <label id="lblperson" name="lblperson">Person</label>
+      <p>
+        <label>List limit</label>
+        <input class="ccinpt" type="number" id="xlimit" name="xlimit" value="20" min="1" max="50" />
+        <label>Order by</label>
+        <select name="orderby" id="orderby">
+          <option value="email" selected>[email]</option>
+          <option value="id">id</option>
+          <option value="name">name</option>
+          <option value="surname">surname</option>
+        </select>
+      </p>
+      <button type="button" id="btnperson" name="btnperson" onclick="checkPerson()" >Check</button>
+      <br>
+      <div class="dvpg">
+        <a href="#/person?paginator=email,email,1,15,data">
+          <div class="cpaginator" onclick="checkPerson(1)">1</div>
+        </a>
+        <a href="#/person?paginator=email,email,2,15,data">
+          <div class="paginator" onclick="checkPerson(2)">2</div>
+        </a>
+        </a>
+        <a href="#/person?paginator=email,email,3,15,data">
+          <div class="paginator" onclick="checkPerson(3)">3</div>
+        </a>
+        </a>
+        <a href="#/person?orderby=email&page=4&limit=15">
+          <div class="paginator" onclick="checkPerson(4)">4</div>
+        </a>
+        </a>
+        <a href="#/person?orderby=email&page=5&limit=15">
+          <div class="paginator" onclick="checkPerson(5)">5</div>
+        </a>
+      </div>
+      <br>
+    </div>
+    <hr>
+    <div>
+      <label id="lblcontactslist" name="lblcontactslist">Contacts</label>
+      <p>
+        ID:<input class="ccinpt" type="number" id="ckcontacts" name="ckcontants" placeholder="person id" min="0" />
+        Page:<input class="ccinpt" type="number" id="ckpage" name="ckpage" placeholder="page number" min="1" />
+      </p>
+      <button type="button" id="btncontacts" name="btncontacts" onclick="checkContactsPage()" >Check</button>
+      <p>
+        <label>List limit</label>
+        <input class="cinpt" type="number" id="ckcontantslist" name="ckcontantslist" value="10" min="1" max="50" required/>
+        <label>Order by</label>
+        <select name="corderby" id="corderby">
+          <option value="personemail" selected>personemail</option>
+          <option value="personid">personid</option>
+          <option value="contactsid">contactsid</option>
+          <option value="contactsname">contactsname</option>
+          <option value="contactsemail">contactsemail</option>
+          <option value="id">id</option>
+        </select>
+      </p>
+      <button type="button" id="btncontactslist" name="btncontactslist" onclick="checkContacts()" >Check</button>
+      <br>
+      <div class="dvpg">
+        <a href="#/getcontacts/1?page=1">
+          <div class="cpaginator" onclick="checkContacts(1)">1</div>
+        </a>
+        <a href="#/getcontacts/1?page=2">
+          <div class="paginator" onclick="checkContacts(2)">2</div>
+        </a>
+      </div>
+      <br>
+    </div>
+    <hr>
+    <div>
+      <h1>cURL Info.</h1>
+      <div class="code">
+        <p>Create a new person entity.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X POST -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/postperson \
+--data '{"name":"Dela","surname":"Landa","age":21,"gender":"male","birthday":"2000/03/10","phone":"0103456789","email":"dela@landas.io"}'
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>Create contacts for a person entity.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X POST -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/postcontacts \
+--data '{"personid":5,"contactsid":9,"contactsname":"Renny","contactsphone":"0123050789","contactsemail":"renny@ron.io","personemail":"conny@con.io" }'
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>View person.</p>
+        <div class="dvwrap">
+        <pre>
+curl --get http://localhost:8000/person?paginator=email,email,1,15,data,orderby,page,limit,person
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>Update person.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X PUT -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/updateperson/27 \
+--data '{"name":"Loy","surname":"Hony", "age":null,"gender":"male","birthday":"1961/07/02","phone":"0290940678","email":"loy@hony.io"}'
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>Delete contacts.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X DELETE -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/deletecontacts/15 \
+--data '{"personid":15,"contactsid":25,"contactsemail":"qony@ondy.io"}'
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>Delete person.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X "DELETE" \
+-H 'Content-type: application/json' http://localhost:8000/deleteperson/25 \
+--data '{"personid": 25, "email": "qony@qon.io"}'
+        </pre>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h1>One More Thing...</h1>
+    <p><a href="/graphqlapp">Graphql app</a></p>
+    <div class="code">
+      <p>Create a new person entity.</p>
+      <div class="dvwrap">
+      <pre>
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { postPerson(input:{name:\"Cula\",surname:\"Javu\",age:null,gender:\"\",birthday:\"2001/07/07\",phone:\"0120456432\",email:\"cula@javu.io\"}){email}}"}' \
+http://localhost:8000/graphql
+      </pre>
+      </div>
+    </div>
+    <hr>
+    <div class="code">
+      <p>@last</p>
+      <div class="dvwrap">
+      <pre>
+#Testing 123...
+
+#1. create Person: cURL...
+
+curl -X POST -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/postperson \
+--data '{"name":"Dela","surname":"Landa","age":21,"gender":"male","birthday":"2000/03/10","phone":"0103456789","email":"dela@landas.io"}'
+
+
+#2. create Person: graphql...
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { postPerson(input:{name:\"Jula\",surname:\"Navu\",age:null,gender:\"\",birthday:\"2003/07/07\",phone:\"0120406432\",email:\"jula@navu.io\"}){email}}"}' \
+http://localhost:8000/graphql
+
+#3. create Contacts: cURL...
+
+curl -X POST -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/postcontacts \
+--data '{"personid":5,"contactsid":9,"contactsname":"Renny","contactsphone":"0123050789","contactsemail":"renny@ron.io","personemail":"conny@con.io" }'
+
+
+#4. create Contacts: graphql...
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { postContacts(input:{personid:6,contactsid:9,contactsname:\"Renny\",contactsphone:\"0123050789\",contactsemail:\"renny@ron.io\",personemail:\"bonny@bon.io\"}){contactsname,contactsemail}}"}' \
+http://localhost:8000/graphql
+
+
+#5. read: cURL...
+
+curl --get http://localhost:8000/person?paginator=email,email,1,15,data,orderby,page,limit,person
+
+#6. read: graphql...
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "{getPersonPage(page: \"email,email,1,15,data\", plimit: 15){ id, name, email,id,name,surname,email, contacts{id, personid, contactsid, contactsemail, personemail}, created, modified }}"}' \
+http://localhost:8000/graphql
+
+
+#7. update: cURL..
+
+curl -X PUT -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/updateperson/27 \
+--data '{"name":"Loy","surname":"Hony", "age":null,"gender":"male","birthday":"1961/07/02","phone":"0290940678","email":"loy@hony.io"}'
+
+#8. update: graphql....
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { updatePerson(id: 12, input:{name:\"Cenny\",surname:\"Sony\",age:null,gender:\"female\",birthday:\"1990/10/04\",phone:\"0820060002\",email:\"cenny@sony.io\"}){name, surname, phone, email}}"}' \
+http://localhost:8000/graphql
+
+#9. delete: cURL...
+
+curl -X "DELETE" \
+-H 'Content-type: application/json' http://localhost:8000/deleteperson/25 \
+--data '{"personid": 25, "email": "qony@qon.io"}'
+
+#10. delete: graphql...
+
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { deletePerson(id: 13, input:{email:\"benny@bon.io\"}){id, email}}"}' \
+http://localhost:8000/graphql
+      </pre>
+      </div>
+    </div>
+    <hr>
+    <footer>
+      <br>
+      <div id="dvsize"></div>
+      <br>
+      <div>
+        <div class="info">
+          <a href="/">About us.</a><br>
+          <p>2021</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../js/app3.js"></script>
+    <script src="../js/log3.js"></script>
+    <script src="../js/displayapp.js"></script>
+    <script src="../js/app.js"></script>
+  </body>
+</html>

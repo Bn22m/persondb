@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!--
+graphqlapp.html
+-->
+<html lang="en">
+  <head>
+    <title>GQL Person App Project</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../public/css/main.css">
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <ul class="navbar1">
+          <li><a href="/">Home</a></li>
+          <li><a href="/app">New person</a></li>
+          <li><a href="/graphqlapp">Graphql app</a></li>
+        </ul>
+      </div>
+    </header>
+    <h1> GQL Person App. </h1>
+    <div>
+      <progress id="ckodbprogres" value="0" max="100">0%</progress>
+      <div class="code">
+        <p>View person.</p>
+        <div class="dvwrap">
+        <pre id="dvcode">
+# GraphQL query.
+
+query getPersonPage($page: String, $plimit: Int) {
+      getPersonPage(page: $page, plimit: $plimit){
+        id, name, surname, age, gender, birthday, phone, email, contacts {id, contactsemail, personemail}, created, modified
+      }
+  }
+
+# Query Variables.
+
+{
+  "page": "email,email,1,10,0",
+  "plimit": 10
+}
+
+#########
+#
+        </pre>
+        </div>
+      <div id="dvresults">
+      </div>
+    </div>
+    <div>
+      <div id="dvinfo"></div>
+      <div id="dvinfo2"></div>
+      <div id="dvdisplay"></div>
+      <div id="dvtemp2"></div>
+    </div>
+    <hr>
+    <div class="dvlogs">
+      <div class="log" id="log"></div>
+      <div class="logs" id="logs"></div>
+    </div>
+    <hr>
+    <div>
+      <label id="lblperson" name="lblperson">Person</label>
+      <p>
+        <label>List limit</label>
+        <input class="ccinpt" type="number" id="xlimit" name="xlimit" value="20" min="1" max="50" />
+        <label>Order by</label>
+        <select name="orderby" id="orderby">
+          <option value="email" selected>[email]</option>
+          <option value="id">id</option>
+          <option value="name">name</option>
+          <option value="surname">surname</option>
+        </select>
+      </p>
+      <button type="button" id="btnperson" name="btnperson" onclick="checkPersonPage()" >Check</button>
+      <br>
+      <div class="dvpg">
+        <a href="#/person?paginator=email,email,1,10,data">
+          <div class="cpaginator" onclick="checkPersonPage(1)">1</div>
+        </a>
+        <a href="#/person?paginator=email,email,2,10,data">
+          <div class="paginator" onclick="checkPersonPage(2)">2</div>
+        </a>
+        </a>
+        <a href="#/person?paginator=email,email,3,10,data">
+          <div class="paginator" onclick="checkPersonPage(3)">3</div>
+        </a>
+        </a>
+        <a href="#/person?orderby=email&page=4&limit=10">
+          <div class="paginator" onclick="checkPersonPage(4)">4</div>
+        </a>
+        </a>
+        <a href="#/person?orderby=email&page=5&limit=10">
+          <div class="paginator" onclick="checkPersonPage(5)">5</div>
+        </a>
+      </div>
+      <br>
+    </div>
+    <hr>
+    <div>
+      <label id="lblcontactslist" name="lblcontactslist">Contacts</label>
+      <p>
+        personid:<input class="ccinpt" type="number" id="ckcontacts" name="ckcontants" placeholder="person id" min="0" />
+        page:<input class="ccinpt" type="number" id="ckpage" name="ckpage" placeholder="page number" min="1" />
+      </p>
+      <button type="button" id="btncontacts" name="btncontacts" onclick="getContacts()" >Check</button>
+      <p>
+        <label>List limit</label>
+        <input class="cinpt" type="number" id="ckcontantslist" name="ckcontantslist" value="10" min="1" max="50" required/>
+        <label>Order by</label>
+        <select name="corderby" id="corderby">
+          <option value="contactsemail" selected>contactsemail</option>
+          <option value="personid">personid</option>
+          <option value="contactsid">contactsid</option>
+          <option value="id">id</option>
+        </select>
+      </p>
+      <button type="button" id="btncontactslist" name="btncontactslist" onclick="checkContacts()" >Check</button>
+      <br>
+      <div class="dvpg">
+        <a href="#/contactslist?page=1">
+          <div class="cpaginator" onclick="checkContacts(1)">1</div>
+        </a>
+        <a href="#/contactslist?page=2">
+          <div class="paginator" onclick="checkContacts(2)">2</div>
+        </a>
+      </div>
+      <br>
+    </div>
+    <hr>
+    <div>
+      <h1>cURL Info.</h1>
+      <div class="code">
+        <p>View person.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "{getPersonPage(page: \"email,email,1,15,data\", plimit: 15){ id, name, email,id,name,surname,email, contacts{id, personid, contactsid, contactsemail, personemail}, created, modified }}"}' \
+http://localhost:8000/graphql
+        </pre>
+        </div>
+      </div>
+      <hr>
+      <div class="code">
+        <p>Create a new person entity.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { postPerson(input:{name:\"Jula\",surname:\"Navu\",age:null,gender:\"\",birthday:\"2003/07/07\",phone:\"0120406432\",email:\"jula@navu.io\"}){email}}"}' \
+http://localhost:8000/graphql
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>Create contacts.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { postContacts(input:{personid:6,contactsid:9,contactsname:\"Renny\",contactsphone:\"0123050789\",contactsemail:\"renny@ron.io\",personemail:\"bonny@bon.io\"}){contactsname,contactsemail}}"}' \
+http://localhost:8000/graphql
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>Update person.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { updatePerson(id: 12, input:{name:\"Cenny\",surname:\"Sony\",age:null,gender:\"female\",birthday:\"1990/10/04\",phone:\"0820060002\",email:\"cenny@sony.io\"}){name, surname, phone, email}}"}' \
+http://localhost:8000/graphql
+        </pre>
+        </div>
+      </div>
+      <div class="code">
+        <p>Delete person.</p>
+        <div class="dvwrap">
+        <pre>
+curl -X POST \
+-H "Content-Type:application/json" \
+-d'{"query": "mutation { deletePerson(id: 13, input:{email:\"benny@bon.io\"}){id, email}}"}' \
+http://localhost:8000/graphql
+        </div>
+      </div>
+    </div>
+    <hr>
+    <footer>
+      <br>
+      <div id="dvsize"></div>
+      <br>
+      <div>
+        <div class="info">
+          <a href="/">About us.</a><br>
+          <p>2021</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../js/app3.js"></script>
+    <script src="../js/log3.js"></script>
+    <script src="../js/graphqljs/person.js"></script>
+    <script src="../js/graphqljs/contactslist.js"></script>
+    <script src="../js/graphqljs/graphqlview.js"></script>
+    <script src="../js/graphqljs/graphqlapp.js"></script>
+  </body>
+</html>

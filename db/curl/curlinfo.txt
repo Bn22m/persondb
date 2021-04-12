@@ -1,0 +1,44 @@
+####################
+# cURL Info.
+# 2021
+# BM
+#####################
+# http://localhost:8000/
+# For more info.
+#################################
+
+# Create a new person entity.
+
+curl -X POST -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/postperson \
+--data '{"name":"Dela","surname":"Landa","age":21,"gender":"male","birthday":"2000/03/10","phone":"0103456789","email":"dela@landas.io"}'
+
+# View person.
+
+curl --get http://localhost:8000/person?paginator=email,email,1,15,data,orderby,page,limit,person
+
+# Update person.
+
+curl -X PUT -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/updateperson/27 \
+--data '{"name":"Loy","surname":"Hony", "age":null,"gender":"male","birthday":"1961/07/02","phone":"0290940678","email":"loy@hony.io"}'
+
+
+# Delete person.
+
+curl -X DELETE -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/deleteperson/25 \
+--data '{"personid": 25, "email":"qony@ondy.io"}'
+
+# Create contacts for a person entity.
+
+curl -X POST -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/postcontacts \
+--data '{"personid":5,"contactsid":9,"contactsname":"Renny","contactsphone":"0123050789","contactsemail":"renny@ron.io","personemail":"conny@con.io" }'
+
+
+# Delete contacts.
+
+curl -X DELETE -H 'Accept: application/json' \
+-H 'Content-type: application/json' http://localhost:8000/deletecontacts/2 \
+--data '{"personid":2,"contactsid":6, "contactsemail":"bonny@bon.io"}'

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+app.html
+-->
+<html lang="en">
+  <head>
+    <title>New Person App Project</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../public/css/main.css">
+  </head>
+  <body>
+    <header>
+      <div class="navbar">
+        <ul class="navbar1">
+          <li><a href="/">Home</a></li>
+          <li><a href="/graphqlapp">Graphql app</a></li>
+        </ul>
+      </div>
+    </header>
+    <h1> New Person App. </h1>
+    <div>
+      <progress id="ckodbprogres" value="0" max="100">0%</progress>
+      <div id="dvresults">
+      </div>
+    </div>
+    <hr>
+    <div class="dvlogs">
+      <div class="log" id="log"></div>
+      <div class="logs" id="logs"></div>
+    </div>
+    <hr>
+    <div class="dvregister">
+      <div class="dvreg">
+        <label>Name:</label><br>
+        <input class="ccinpt" type="text" id="txtname" name="txtname" placeholder="name" maxlength="30"  required/>
+      </div>
+      <div class="dvreg">
+        <label>Surname:</label><br>
+        <input class="ccinpt" type="text" id="txtsurname" name="txtsurname" placeholder="surname" maxlength="30"  required/>
+      </div>
+      <div class="dvreg">
+        <label>Age:</label><br>
+        <input class="ccinpt" type="number" id="txtage" name="txtage" min="0"/>
+      </div>
+      <div class="dvreg">
+        <label>Gender:</label><br>
+        <input type="radio" name="rdgender" value="male" id="rdgender1">Male
+        <input type="radio" name="rdgender" value="female" id="rdgender2">Female
+      </div>
+      <div class="dvreg">
+        <label>Birthday:</label><br>
+        <input class="cinpt" type="date" id="txtbirthday" name="txtbirthday" placeholder="birthday" />
+      </div>
+      <div class="dvreg">
+        <label>Phone:</label><br>
+        <input class="cinpt" type="tel" id="txtphone" name="txtphone" placeholder="phone" maxlength="15"/>
+      </div>
+      <div class="dvreg">
+        <label>Email:</label><br>
+        <input class="cinpt" type="email" id="txtemail" name="txtemail" placeholder="email" maxlength="60" required/>
+      </div>
+      <p><button type="button" id="btnnewp" name="btnnewp" onclick="newPerson()" >Submit</button></p>
+      <hr>
+      <p><button type="button" id="btnnewpGQL" name="btnnewpGQL" onclick="postPersonGQL()" >SubmitGQL</button></p>
+    </div>
+    <hr>
+    <footer>
+      <br>
+      <div id="dvsize"></div>
+      <br>
+      <div>
+        <div class="info">
+          <a href="/">About us.</a><br>
+          <p>2021</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../js/app3.js"></script>
+    <script src="../js/log3.js"></script>
+    <script src="../js/newperson.js"></script>
+  </body>
+</html>
